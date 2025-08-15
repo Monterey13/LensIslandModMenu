@@ -32,5 +32,20 @@ namespace LensIslandModMenu.Cheats
                 Log.LogError($"Failed to kill player: {ex.Message}");
             }
         }
+
+        public static void GiveXP(ManualLogSource Log, int amount)
+        {
+            Log.LogInfo($"Granting players {amount} XP.");
+            try
+            {
+                global::EventHandler.OnGiveAllPlayersXP(amount);
+                SkillSystem.Instance.GiveXP(amount);
+                Log.LogInfo($"Granted {amount} XP to player.");
+            }
+            catch (Exception ex)
+            {
+                Log.LogError($"Failed to give XP ({amount}). Message: {ex.Message}");
+            }
+        }
     }
 }

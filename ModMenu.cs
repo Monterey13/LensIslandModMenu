@@ -52,13 +52,18 @@ namespace LensIslandModMenu
                     GUILayout.BeginVertical();
                     if (GUILayout.Button("Increase Backpack Level"))
                     {
-                        Log.LogInfo("Increase Backpack Level pressed.");
+                        Log.LogInfo("Increase Backpack Level pressed...");
                         PlayerCheats.IncreaseBackpackLevel(Log);
                     }
                     if (GUILayout.Button("Kill Player"))
                     {
-                        Log.LogInfo("Kill Player pressed.");
+                        Log.LogInfo("Kill Player pressed...");
                         PlayerCheats.KillPlayer(Log);
+                    }
+                    if (GUILayout.Button("Give 500 XP"))
+                    {
+                        Log.LogInfo("Give XP pressed...");
+                        PlayerCheats.GiveXP(Log, 500);
                     }
                     GUILayout.Space(8);
                     GUILayout.Label("Toggle: F1");
