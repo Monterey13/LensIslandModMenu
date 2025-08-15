@@ -5,7 +5,7 @@ namespace LensIslandModMenu.Cheats
 {
     internal class PlayerCheats
     {
-        public static void IncreaseBackpackLevel(ManualLogSource Log)
+        public static void IncreaseBackpackLevel(ManualLogSource Log) //Doesn't do anything?
         {
             try
             {
@@ -20,7 +20,7 @@ namespace LensIslandModMenu.Cheats
             }
         }
 
-        public static void KillPlayer(ManualLogSource Log)
+        public static void KillPlayer(ManualLogSource Log) //Kills the player instantly.
         {
             Log.LogInfo("Killing player...");
             try
@@ -33,7 +33,7 @@ namespace LensIslandModMenu.Cheats
             }
         }
 
-        public static void GiveXP(ManualLogSource Log, int amount)
+        public static void GiveXP(ManualLogSource Log, int amount) //Gives XP.
         {
             Log.LogInfo($"Granting players {amount} XP.");
             try

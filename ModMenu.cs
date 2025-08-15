@@ -19,6 +19,7 @@ namespace LensIslandModMenu
 
         private bool _menuOpen;
         private Rect _menuRect = new Rect(20, 20, 300, 260);
+        private int _xpAmount = 500; // Default XP amount
 
         private void Awake()
         {
@@ -75,10 +76,12 @@ namespace LensIslandModMenu
                         Log.LogInfo("Kill Player pressed...");
                         PlayerCheats.KillPlayer(Log);
                     }
-                    if (GUILayout.Button("Give 500 XP"))
+                    GUILayout.Space(5);
+                    _xpAmount = (int)GUILayout.HorizontalSlider(_xpAmount, 0, 10000);
+                    if (GUILayout.Button($"Give {_xpAmount} XP"))
                     {
-                        Log.LogInfo("Give XP pressed...");
-                        PlayerCheats.GiveXP(Log, 500);
+                        Log.LogInfo($"Give XP pressed... Amount: {_xpAmount}");
+                        PlayerCheats.GiveXP(Log, _xpAmount);
                     }
                     GUILayout.Space(8);
                     GUILayout.Label("Toggle: F1");
