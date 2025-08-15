@@ -20,6 +20,10 @@ namespace LensIslandModMenu
         private bool _menuOpen;
         private Rect _menuRect = new Rect(20, 20, 300, 260);
         private int _xpAmount = 500; // Default XP amount
+        private int _rsAmount = 1; // Default resource amount
+        private bool _showResourceList = false;
+        private ResourceTypes _resourceType = ResourceTypes.GoldCoins; // Default resource type
+        private bool _godModeEnabled = false;
 
         private void Awake()
         {
@@ -82,6 +86,39 @@ namespace LensIslandModMenu
                     {
                         Log.LogInfo($"Give XP pressed... Amount: {_xpAmount}");
                         PlayerCheats.GiveXP(Log, _xpAmount);
+                    }
+                    if (GUILayout.Button($"God Mode: {(_godModeEnabled ? "ON" : "OFF")}"))
+                    {
+                        Log.LogInfo("TGM Pressed...");
+                        _godModeEnabled = PlayerCheats.ToggleGodMode(Log);
+                    }
+                    // Dropdown toggle button
+                    if (GUILayout.Button($"Resource: {_resourceType}"))
+                    {
+                        _showResourceList = !_showResourceList;
+                    }
+
+                    // Show dropdown list if open
+                    if (_showResourceList)
+                    {
+                        foreach (ResourceTypes rt in Enum.GetValues(typeof(ResourceTypes)))
+                        {
+                            if (GUILayout.Button(rt.ToString()))
+                            {
+                                _resourceType = rt;
+                                _showResourceList = false;
+                            }
+                        }
+                    }
+
+                    // Amount slider
+                    _rsAmount = (int)GUILayout.HorizontalSlider(_rsAmount, 1, 250);
+
+                    // Spawn button
+                    if (GUILayout.Button($"Spawn {_rsAmount}x {_resourceType}"))
+                    {
+                        Log.LogInfo("SpawnItem Pressed...");
+                        ItemCheats.SpawnItem(Log, _rsAmount, _resourceType);
                     }
                     GUILayout.Space(8);
                     GUILayout.Label("Toggle: F1");

@@ -47,5 +47,21 @@ namespace LensIslandModMenu.Cheats
                 Log.LogError($"Failed to give XP ({amount}). Message: {ex.Message}");
             }
         }
+        public static bool ToggleGodMode(ManualLogSource Log)
+        {
+            try
+            {
+                DebugConsole.GodMode = !DebugConsole.GodMode;
+                bool result = DebugConsole.GodMode;
+                Log.LogInfo("Godmode toggled.");
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Log.LogInfo($"Godmode toggle FAILED: {ex.Message}");
+                return DebugConsole.GodMode;
+            }
+            
+        }
     }
 }
