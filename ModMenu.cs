@@ -1,7 +1,8 @@
-﻿using System;
-using BepInEx;
+﻿using BepInEx;
 using BepInEx.Logging;
+using HarmonyLib;
 using LensIslandModMenu.Cheats;
+using System;
 using UnityEngine;
 
 namespace LensIslandModMenu
@@ -14,6 +15,7 @@ namespace LensIslandModMenu
         public const string PluginVersion = "0.1.0";
 
         internal static ManualLogSource Log;
+        private Harmony _harmony;
 
         private bool _menuOpen;
         private Rect _menuRect = new Rect(20, 20, 300, 260);
@@ -23,14 +25,32 @@ namespace LensIslandModMenu
             Log = Logger;
             Log.LogInfo($"{PluginName} v{PluginVersion} loaded. goActive={gameObject.activeInHierarchy}, compEnabled={enabled}");
 
-            // Create a persistent driver so Update runs no matter what.
-            var go = new GameObject("Midnight_ModMenu_Driver");
-            go.hideFlags = HideFlags.HideAndDontSave;
-            GameObject.DontDestroyOnLoad(go);
+            try
+            {
+                // Driver to keep Update/OnGUI alive
+                var go = new GameObject("Midnight_ModMenu_Driver");
+                go.hideFlags = HideFlags.HideAndDontSave;
+                DontDestroyOnLoad(go);
+                var driver = go.AddComponent<UpdateDriver>();
+                driver.OnUpdate += PluginUpdate;
+                driver.OnGUIEvent += PluginOnGUI;
+                Log.LogInfo("Driver created & hooks attached.");
+            }
+            catch (Exception ex)
+            {
+                Log.LogError("Driver init FAILED:\n" + ex);
+            }
 
-            var driver = go.AddComponent<UpdateDriver>();
-            driver.OnUpdate += PluginUpdate;
-            driver.OnGUIEvent += PluginOnGUI;
+            try
+            {
+                DlcDetours.Apply(Log);
+                _harmony = new Harmony(PluginGuid);
+                _harmony.PatchAll();
+            }
+            catch (Exception ex)
+            {
+                Log.LogError("Apply Patches FAILED:\n" + ex);
+            }
         }
 
         private void PluginUpdate()
@@ -50,11 +70,6 @@ namespace LensIslandModMenu
                 id =>
                 {
                     GUILayout.BeginVertical();
-                    //if (GUILayout.Button("Increase Backpack Level"))
-                    //{
-                    //    Log.LogInfo("Increase Backpack Level pressed...");
-                    //    PlayerCheats.IncreaseBackpackLevel(Log);
-                    //}
                     if (GUILayout.Button("Kill Player"))
                     {
                         Log.LogInfo("Kill Player pressed...");
@@ -72,6 +87,18 @@ namespace LensIslandModMenu
                 },
                 "Midnight Mod Menu"
             );
+        }
+
+        private void OnDestroy()
+        {
+            try
+            {
+                _harmony?.UnpatchSelf();
+            }
+            catch
+            {
+                /*ignore*/
+            }
         }
     }
 

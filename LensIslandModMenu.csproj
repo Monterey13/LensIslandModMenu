@@ -17,6 +17,9 @@
       <HintPath>D:\SteamLibrary\steamapps\common\Len's Island\BepInEx\core\BepInEx.dll</HintPath>
 	  <private>false</private>
     </Reference>
+    <Reference Include="MonoMod.RuntimeDetour">
+      <HintPath>D:\SteamLibrary\steamapps\common\Len's Island\BepInEx\plugins\LensIslandModMenu\MonoMod.RuntimeDetour.dll</HintPath>
+    </Reference>
     <Reference Include="Sirenix.OdinInspector.Attributes">
       <HintPath>D:\SteamLibrary\steamapps\common\Len's Island\Len's Island_Data\Managed\Sirenix.OdinInspector.Attributes.dll</HintPath>
     </Reference>
