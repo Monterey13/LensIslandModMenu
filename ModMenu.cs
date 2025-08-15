@@ -18,12 +18,17 @@ namespace LensIslandModMenu
         private Harmony _harmony;
 
         private bool _menuOpen;
-        private Rect _menuRect = new Rect(20, 20, 300, 260);
+        private Rect _menuRect = new Rect(20, 20, 350, 500);
         private int _xpAmount = 500; // Default XP amount
         private int _rsAmount = 1; // Default resource amount
-        private bool _showResourceList = false;
+        private int _maxXpAmount = 10000; // Max XP Amount
+        private int _rsMaxAmount = 250; // Max resource amount
+        private int _selectedResourceIndex = -1;
+        private Vector2 _resourceScroll;
         private ResourceTypes _resourceType = ResourceTypes.GoldCoins; // Default resource type
         private bool _godModeEnabled = false;
+        private static readonly ResourceTypes[] _resourceValues = (ResourceTypes[])Enum.GetValues(typeof(ResourceTypes));
+        private static readonly string[] _resourceNames = Array.ConvertAll(_resourceValues, v => v.ToString());
 
         private void Awake()
         {
@@ -75,51 +80,61 @@ namespace LensIslandModMenu
                 id =>
                 {
                     GUILayout.BeginVertical();
+
+                    // Suicide Button
+
                     if (GUILayout.Button("Kill Player"))
                     {
                         Log.LogInfo("Kill Player pressed...");
                         PlayerCheats.KillPlayer(Log);
                     }
                     GUILayout.Space(5);
-                    _xpAmount = (int)GUILayout.HorizontalSlider(_xpAmount, 0, 10000);
+
+                    // Give XP Amount
+
+                    _xpAmount = (int)GUILayout.HorizontalSlider(_xpAmount, 0, _maxXpAmount);
                     if (GUILayout.Button($"Give {_xpAmount} XP"))
                     {
                         Log.LogInfo($"Give XP pressed... Amount: {_xpAmount}");
                         PlayerCheats.GiveXP(Log, _xpAmount);
                     }
+
+                    // Toggle God Mode
+
                     if (GUILayout.Button($"God Mode: {(_godModeEnabled ? "ON" : "OFF")}"))
                     {
                         Log.LogInfo("TGM Pressed...");
                         _godModeEnabled = PlayerCheats.ToggleGodMode(Log);
                     }
+
                     // Dropdown toggle button
-                    if (GUILayout.Button($"Resource: {_resourceType}"))
+                    GUILayout.Label("Select Resource:");
+                    _resourceScroll = GUILayout.BeginScrollView(_resourceScroll, GUILayout.Height(180));
+                    int newIndex = GUILayout.SelectionGrid(
+                        _selectedResourceIndex,
+                        _resourceNames,
+                        2,                           
+                        GUILayout.ExpandWidth(true)
+                    );
+                    GUILayout.EndScrollView();
+
+                    if (newIndex != _selectedResourceIndex && newIndex >= 0)
                     {
-                        _showResourceList = !_showResourceList;
+                        _selectedResourceIndex = newIndex;
+                        _resourceType = _resourceValues[_selectedResourceIndex];
                     }
 
-                    // Show dropdown list if open
-                    if (_showResourceList)
-                    {
-                        foreach (ResourceTypes rt in Enum.GetValues(typeof(ResourceTypes)))
-                        {
-                            if (GUILayout.Button(rt.ToString()))
-                            {
-                                _resourceType = rt;
-                                _showResourceList = false;
-                            }
-                        }
-                    }
+                    // Amount slider (0..10k like your XP slider)
+                    GUILayout.Label($"Amount: {_rsAmount}");
+                    _rsAmount = (int)GUILayout.HorizontalSlider(_rsAmount, 0, _rsMaxAmount);
 
-                    // Amount slider
-                    _rsAmount = (int)GUILayout.HorizontalSlider(_rsAmount, 1, 250);
-
-                    // Spawn button
+                    // Spawn button (uses your existing pattern)
                     if (GUILayout.Button($"Spawn {_rsAmount}x {_resourceType}"))
                     {
                         Log.LogInfo("SpawnItem Pressed...");
                         ItemCheats.SpawnItem(Log, _rsAmount, _resourceType);
                     }
+
                     GUILayout.Space(8);
                     GUILayout.Label("Toggle: F1");
                     GUILayout.EndVertical();
