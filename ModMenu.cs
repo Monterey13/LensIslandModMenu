@@ -50,11 +50,11 @@ namespace LensIslandModMenu
                 id =>
                 {
                     GUILayout.BeginVertical();
-                    if (GUILayout.Button("Increase Backpack Level"))
-                    {
-                        Log.LogInfo("Increase Backpack Level pressed...");
-                        PlayerCheats.IncreaseBackpackLevel(Log);
-                    }
+                    //if (GUILayout.Button("Increase Backpack Level"))
+                    //{
+                    //    Log.LogInfo("Increase Backpack Level pressed...");
+                    //    PlayerCheats.IncreaseBackpackLevel(Log);
+                    //}
                     if (GUILayout.Button("Kill Player"))
                     {
                         Log.LogInfo("Kill Player pressed...");
