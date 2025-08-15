@@ -33,11 +33,8 @@ namespace LensIslandModMenu
             driver.OnGUIEvent += PluginOnGUI;
         }
 
-        // Our "Update" logic lives here, driven by UpdateDriver
         private void PluginUpdate()
         {
-            // Add a heartbeat if you want to verify:
-            // if (Time.frameCount % 120 == 0) Log.LogInfo("PluginUpdate tick");
 
             if (Input.GetKeyDown(KeyCode.F1))
                 _menuOpen = !_menuOpen;
@@ -73,7 +70,6 @@ namespace LensIslandModMenu
         }
     }
 
-    // Lives in the same assembly; no extra DLLs required.
     public sealed class UpdateDriver : MonoBehaviour
     {
         public event Action OnUpdate;
