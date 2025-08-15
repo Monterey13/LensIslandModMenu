@@ -1,6 +1,5 @@
-﻿// using directives
-using BepInEx.Logging;
-using HarmonyLib; // only for AccessTools if you want
+﻿using BepInEx.Logging;
+using HarmonyLib;
 using LensIslandModMenu;
 using MonoMod.RuntimeDetour;
 using System.Reflection;
@@ -10,7 +9,6 @@ internal static class DlcDetours
     private static Hook _dlcEnumHook;
     private static Hook _dlcIfaceHook;
 
-    // Define delegate types that match the originals
     private delegate bool IsDlcUnlockedEnum_Orig(DLC_Manager.DLC dlc);
     private delegate bool IsDlcUnlockedIface_Orig(object dlcInterface /* DLC_Interface */);
 
@@ -55,15 +53,12 @@ internal static class DlcDetours
         }
     }
 
-    // Replacement for enum overload
     private static bool IsDlcUnlockedEnum_Repl(IsDlcUnlockedEnum_Orig orig, DLC_Manager.DLC dlc)
     {
-        // prove we’re being hit
         ModMenuPlugin.Log?.LogInfo($"[Detour] IsDlcUnlocked(DLC:{dlc}) -> TRUE");
-        return true; // hard force
+        return true;
     }
 
-    // Replacement for interface overload
     private static bool IsDlcUnlockedIface_Repl(IsDlcUnlockedIface_Orig orig, object dlcInterface)
     {
         ModMenuPlugin.Log?.LogInfo($"[Detour] IsDlcUnlocked(DLC_Interface:{dlcInterface}) -> TRUE");
