@@ -32,6 +32,9 @@
     <Reference Include="Sirenix.Utilities">
       <HintPath>D:\SteamLibrary\steamapps\common\Len's Island\Len's Island_Data\Managed\Sirenix.Utilities.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.TextMeshPro">
+      <HintPath>D:\SteamLibrary\steamapps\common\Len's Island\Len's Island_Data\Managed\Unity.TextMeshPro.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine">
       <HintPath>D:\SteamLibrary\steamapps\common\Len's Island\Len's Island_Data\Managed\UnityEngine.dll</HintPath>
 	  <private>false</private>

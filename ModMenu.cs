@@ -1,6 +1,7 @@
 ﻿using BepInEx;
 using BepInEx.Logging;
 using LensIslandModMenu.Cheats;
+using LensIslandModMenu.MonoMod;
 using System;
 using UnityEngine;
 
@@ -21,7 +22,7 @@ namespace LensIslandModMenu
         private Vector2 _resourceScroll;
 
         private bool _godModeEnabled = false;
-        public static bool IsPlayingBlackjack { get; private set; } = false;
+        public static bool AlwaysWin { get; private set; } = false;
 
         private int _xpAmount = 500; // Default XP amount
         private int _rsAmount = 1; // Default resource amount
@@ -58,6 +59,7 @@ namespace LensIslandModMenu
             try
             {
                 Detour_IsDlcUnlocked.Apply(Log);
+                Detour_DealInitialCards.Apply(Log);
             }
             catch (Exception ex)
             {
@@ -138,17 +140,10 @@ namespace LensIslandModMenu
                     }
 
                     // Play Blackjack Button
-                    if (GUILayout.Button($"{(IsPlayingBlackjack ? "Stop Playing Blackjack" : "Play Blackjack")}"))
+                    if (GUILayout.Button($"Always Win Blackjack: {(AlwaysWin ? "ON" : "OFF")}"))
                     {
-                        IsPlayingBlackjack = !IsPlayingBlackjack;
-                        Log.LogInfo($"IsPlayingBlackjack set to {IsPlayingBlackjack}");
-                    }
-
-                    // Deal Player Ace
-                    if (GUILayout.Button($"Deal Player Ace"))
-                    {
-                        Log.LogInfo($"Deal Player Ace pressed...");
-                        BlackjackCheats.DealPlayerAce(Log);
+                        AlwaysWin = !AlwaysWin;
+                        Log.LogInfo($"IsPlayingBlackjack set to {AlwaysWin}");
                     }
 
                     GUILayout.Space(8);
