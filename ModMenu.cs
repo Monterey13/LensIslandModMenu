@@ -57,7 +57,7 @@ namespace LensIslandModMenu
 
             try
             {
-                DlcDetours.Apply(Log);
+                Detour_IsDlcUnlocked.Apply(Log);
             }
             catch (Exception ex)
             {

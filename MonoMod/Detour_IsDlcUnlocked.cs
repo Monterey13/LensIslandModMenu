@@ -4,7 +4,7 @@ using LensIslandModMenu;
 using MonoMod.RuntimeDetour;
 using System.Reflection;
 
-internal static class DlcDetours
+internal static class Detour_IsDlcUnlocked
 {
     private static Hook _dlcEnumHook;
     private static Hook _dlcIfaceHook;
@@ -24,7 +24,7 @@ internal static class DlcDetours
         if (mEnum != null)
         {
             _dlcEnumHook = new Hook(mEnum,
-                typeof(DlcDetours).GetMethod(nameof(IsDlcUnlockedEnum_Repl), BindingFlags.NonPublic | BindingFlags.Static));
+                typeof(Detour_IsDlcUnlocked).GetMethod(nameof(IsDlcUnlockedEnum_Repl), BindingFlags.NonPublic | BindingFlags.Static));
             log.LogInfo($"[Detour] Hooked {mEnum.DeclaringType.Assembly.GetName().Name}:{mEnum.DeclaringType.FullName}.{mEnum}");
         }
         else
@@ -43,7 +43,7 @@ internal static class DlcDetours
             if (mIface != null)
             {
                 _dlcIfaceHook = new Hook(mIface,
-                    typeof(DlcDetours).GetMethod(nameof(IsDlcUnlockedIface_Repl), BindingFlags.NonPublic | BindingFlags.Static));
+                    typeof(Detour_IsDlcUnlocked).GetMethod(nameof(IsDlcUnlockedIface_Repl), BindingFlags.NonPublic | BindingFlags.Static));
                 log.LogInfo($"[Detour] Hooked {mIface.DeclaringType.Assembly.GetName().Name}:{mIface.DeclaringType.FullName}.{mIface}");
             }
             else
