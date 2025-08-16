@@ -1,6 +1,5 @@
 ﻿using BepInEx;
 using BepInEx.Logging;
-using HarmonyLib;
 using LensIslandModMenu.Cheats;
 using System;
 using UnityEngine;
@@ -16,7 +15,6 @@ namespace LensIslandModMenu
         private static ModMenuPlugin _instance;
 
         internal static ManualLogSource Log;
-        private Harmony _harmony;
 
         private Rect _menuRect = new Rect(20, 20, 350, 500);
         private bool _menuOpen;
@@ -60,8 +58,6 @@ namespace LensIslandModMenu
             try
             {
                 DlcDetours.Apply(Log);
-                _harmony = new Harmony(PluginGuid);
-                _harmony.PatchAll();
             }
             catch (Exception ex)
             {
@@ -145,6 +141,14 @@ namespace LensIslandModMenu
                     if (GUILayout.Button($"{(IsPlayingBlackjack ? "Stop Playing Blackjack" : "Play Blackjack")}"))
                     {
                         IsPlayingBlackjack = !IsPlayingBlackjack;
+                        Log.LogInfo($"IsPlayingBlackjack set to {IsPlayingBlackjack}");
+                    }
+
+                    // Deal Player Ace
+                    if (GUILayout.Button($"Deal Player Ace"))
+                    {
+                        Log.LogInfo($"Deal Player Ace pressed...");
+                        BlackjackCheats.DealPlayerAce(Log);
                     }
 
                     GUILayout.Space(8);
@@ -154,18 +158,6 @@ namespace LensIslandModMenu
                 },
                 "Midnight Mod Menu"
             );
-        }
-
-        private void OnDestroy()
-        {
-            try
-            {
-                _harmony?.UnpatchSelf();
-            }
-            catch
-            {
-                /*ignore*/
-            }
         }
     }
 
