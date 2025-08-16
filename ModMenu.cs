@@ -13,20 +13,25 @@ namespace LensIslandModMenu
         public const string PluginGuid = "midnight.lensisland.modmenu";
         public const string PluginName = "Lens Island Mod Menu";
         public const string PluginVersion = "0.1.0";
+        private static ModMenuPlugin _instance;
 
         internal static ManualLogSource Log;
         private Harmony _harmony;
 
-        private bool _menuOpen;
         private Rect _menuRect = new Rect(20, 20, 350, 500);
+        private bool _menuOpen;
+        private Vector2 _resourceScroll;
+
+        private bool _godModeEnabled = false;
+        public static bool IsPlayingBlackjack { get; private set; } = false;
+
         private int _xpAmount = 500; // Default XP amount
         private int _rsAmount = 1; // Default resource amount
         private int _maxXpAmount = 10000; // Max XP Amount
         private int _rsMaxAmount = 250; // Max resource amount
+
         private int _selectedResourceIndex = -1;
-        private Vector2 _resourceScroll;
         private ResourceTypes _resourceType = ResourceTypes.GoldCoins; // Default resource type
-        private bool _godModeEnabled = false;
         private static readonly ResourceTypes[] _resourceValues = (ResourceTypes[])Enum.GetValues(typeof(ResourceTypes));
         private static readonly string[] _resourceNames = Array.ConvertAll(_resourceValues, v => v.ToString());
 
@@ -34,6 +39,7 @@ namespace LensIslandModMenu
         {
             Log = Logger;
             Log.LogInfo($"{PluginName} v{PluginVersion} loaded. goActive={gameObject.activeInHierarchy}, compEnabled={enabled}");
+            _instance = this;
 
             try
             {
@@ -133,6 +139,12 @@ namespace LensIslandModMenu
                     {
                         Log.LogInfo("SpawnItem Pressed...");
                         ItemCheats.SpawnItem(Log, _rsAmount, _resourceType);
+                    }
+
+                    // Play Blackjack Button
+                    if (GUILayout.Button($"{(IsPlayingBlackjack ? "Stop Playing Blackjack" : "Play Blackjack")}"))
+                    {
+                        IsPlayingBlackjack = !IsPlayingBlackjack;
                     }
 
                     GUILayout.Space(8);
